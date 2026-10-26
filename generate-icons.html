@@ -10,7 +10,7 @@ const L=[['icon-72',72,0],['icon-96',96,0],['icon-128',128,0],['icon-144',144,0]
 function dl(name,cv){const a=document.createElement('a');a.download=name+'.png';a.href=cv.toDataURL('image/png');a.click()}
 function shot(name,w,h){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle='#FAF6F0';x.fillRect(0,0,w,h);
 const s=Math.min(w,h)*.4,k=document.createElement('canvas');k.width=k.height=s;logo(k.getContext('2d'),s,0);x.drawImage(k,(w-s)/2,h*.15);
-x.fillStyle='#2C1A12';x.textAlign='center';x.font='bold '+h*.07+'px Georgia';x.fillText('TalaKape PH',w/2,h*.75);x.font=h*.035+'px Georgia';x.fillText('Brew. Log. Discover Philippine coffee.',w/2,h*.83);dl(name,c)}
+x.fillStyle='#2C1A12';x.textAlign='center';x.font='bold '+h*.07+'px Georgia';x.fillText('TalaKape PH',w/2,h*.75);x.font=h*.035+'px Georgia';x.fillText('Brew Studio • PH Origins • Bean Journal • Work Cafes',w/2,h*.83);dl(name,c)}
 document.getElementById('go').onclick=async()=>{const c=document.getElementById('c');for(const[n,s,p]of L){c.width=c.height=s;logo(c.getContext('2d'),s,p);dl(n,c);await new Promise(r=>setTimeout(r,250))}
 shot('screenshot-narrow',540,720);await new Promise(r=>setTimeout(r,250));shot('screenshot-wide',1280,720)};
 </script></body></html>
