@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>TalaKape icon generator</title><style>body{font-family:sans-serif;padding:20px;background:#FAF6F0}button{padding:12px 20px;font-size:1rem;background:#C86D51;color:#fff;border:0;border-radius:8px}</style></head><body>
+<h1>TalaKape PH icon generator</h1><p>Click once. Your browser may ask to allow multiple downloads. Put the PNGs in /icons/, except apple-touch-icon.png and favicon.ico which go in the root (rename a 32px PNG to favicon.ico or convert it).</p><button id="go">Download all</button><canvas id="c" hidden></canvas>
+<script>
+function logo(x,s,pad,bg){const u=s*(1-2*pad)/64,o=s*pad;x.fillStyle='#2C1A12';x.fillRect(0,0,s,s);
+if(bg===false)return;x.save();x.translate(o,o);x.scale(u,u);
+x.fillStyle='#D4A441';x.beginPath();x.moveTo(14,20);x.lineTo(50,20);x.lineTo(44,30);x.lineTo(20,30);x.fill();
+x.fillStyle='#C86D51';x.beginPath();x.moveTo(22,32);x.lineTo(42,32);x.lineTo(39,48);x.lineTo(25,48);x.fill();
+x.fillStyle='#FAF6F0';x.fillRect(20,50,24,4);x.fillStyle='#2C1A12';x.beginPath();x.arc(32,25,2,0,7);x.fill();x.restore()}
+const L=[['icon-72',72,0],['icon-96',96,0],['icon-128',128,0],['icon-144',144,0],['icon-152',152,0],['icon-192',192,0],['icon-384',384,0],['icon-512',512,0],['icon-maskable-192',192,.2],['icon-maskable-512',512,.2],['apple-touch-icon',180,0],['favicon-16x16',16,0],['favicon-32x32',32,0]];
+function dl(name,cv){const a=document.createElement('a');a.download=name+'.png';a.href=cv.toDataURL('image/png');a.click()}
+function shot(name,w,h){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle='#FAF6F0';x.fillRect(0,0,w,h);
+const s=Math.min(w,h)*.4,k=document.createElement('canvas');k.width=k.height=s;logo(k.getContext('2d'),s,0);x.drawImage(k,(w-s)/2,h*.15);
+x.fillStyle='#2C1A12';x.textAlign='center';x.font='bold '+h*.07+'px Georgia';x.fillText('TalaKape PH',w/2,h*.75);x.font=h*.035+'px Georgia';x.fillText('Brew. Log. Discover Philippine coffee.',w/2,h*.83);dl(name,c)}
+document.getElementById('go').onclick=async()=>{const c=document.getElementById('c');for(const[n,s,p]of L){c.width=c.height=s;logo(c.getContext('2d'),s,p);dl(n,c);await new Promise(r=>setTimeout(r,250))}
+shot('screenshot-narrow',540,720);await new Promise(r=>setTimeout(r,250));shot('screenshot-wide',1280,720)};
+</script></body></html>
