@@ -1,4 +1,4 @@
-const V='v4',STATIC_CACHE='talakape-static-'+V,DYNAMIC_CACHE='talakape-dyn-'+V;
+const V='v5',STATIC_CACHE='talakape-static-'+V,DYNAMIC_CACHE='talakape-dyn-'+V;
 const SHELL=['./','./index.html','./offline.html','./css/styles.css','./js/app.js','./manifest.webmanifest','./favicon.svg'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(STATIC_CACHE).then(c=>c.addAll(SHELL))));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(n=>![STATIC_CACHE,DYNAMIC_CACHE].includes(n)).map(n=>caches.delete(n)))).then(()=>self.clients.claim())));
