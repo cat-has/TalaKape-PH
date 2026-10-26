@@ -48,7 +48,7 @@ let dp=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$
 $('#installBtn').onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;$('#installBtn').hidden=true}};
 const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!navigator.standalone&&!matchMedia('(display-mode: standalone)').matches;
 if(ios&&!localStorage.getItem('tk_ios'))$('#ios').hidden=false;$('#iosClose').onclick=()=>{$('#ios').hidden=true;localStorage.setItem('tk_ios','1')};
-if('serviceWorker'in navigator){addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').then(r=>{
+if('serviceWorker'in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').then(r=>{
 const ask=w=>{$('#toast').hidden=false;$('#reload').onclick=()=>w.postMessage({type:'SKIP_WAITING'})};
 if(r.waiting&&navigator.serviceWorker.controller)ask(r.waiting);
 r.addEventListener('updatefound',()=>{const w=r.installing;w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)ask(w)})})}));
