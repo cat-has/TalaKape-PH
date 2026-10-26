@@ -18,14 +18,15 @@
 <div class="tip"><b>Daily brew tip</b><p id="tip"></p></div></nav>
 <main>
 <header><div><div class="mbrand"><img src="favicon.svg" width="28" height="28" alt=""> TalaKape PH</div><h1 id="title">Brew studio</h1><p id="sub" class="sub"></p></div><div><span id="net" class="pill on">Online</span> <button id="installBtn" hidden>Install app</button></div></header>
+<div id="welcome" class="glass" hidden><b>Welcome to TalaKape PH</b><div class="steps3"><span>⏱️ 1. Brew at home</span><span>⛰️ 2. Explore PH beans</span><span>📍 3. Find work cafes near you</span></div><button id="wclose" class="sm">Got it</button></div>
 <section id="brew" class="view"><div class="bento">
 <div class="glass"><h2>Recipe</h2><div class="presets" id="presets"></div>
 <label>Ratio 1:<b id="rv">15</b><input id="ratio" type="range" min="12" max="18" value="15"></label>
 <label>Coffee dose (g)<input id="coffee" type="number" min="1" value="20"></label>
 <div class="kpis"><div><small>Coffee</small><b id="kc">20 g</b></div><div><small>Water</small><b id="water">300 ml</b></div><div><small>Temp</small><b id="kt">93 °C</b></div><div><small>Grind</small><b id="kg">Medium</b></div></div></div>
 <div class="glass center"><div class="ringwrap"><svg viewBox="0 0 240 240" width="240" height="240"><circle class="trk" cx="120" cy="120" r="104"/><circle id="ring" cx="120" cy="120" r="104"/></svg><div class="mid"><div id="clock">00:00</div><div id="stepNow">Ready</div></div></div>
-<div id="steps" class="pills"></div><div class="row"><button id="start">Start</button><button id="reset" class="ghost">Reset</button></div></div></div></section>
-<section id="origins" class="view"><div class="row"><input id="osearch" type="search" placeholder="Search region, notes..."></div><div class="pills" id="vfilter"></div><div id="ocards" class="grid"></div></section>
+<div id="steps" class="pills"></div><div class="row"><button id="start">Start</button><button id="reset" class="ghost">Reset</button><button id="saveRec" class="ghost">Save recipe</button></div></div></div></section>
+<section id="origins" class="view"><div class="row"><input id="osearch" type="search" placeholder="Search region, notes..."></div><div class="pills" id="vfilter"></div><div class="pills" id="rfilter"></div><div id="ocards" class="grid"></div></section>
 <section id="journal" class="view"><div class="tools"><span class="pill on">🔒 Saved offline on this device</span><button type="button" class="ghost sm" data-x="1">Export JSON</button><button type="button" class="ghost sm" data-i="1">Import JSON</button></div><div class="bento"><form id="jform" class="glass form"><h2>Log a bag</h2><input name="roaster" placeholder="Roaster" required><input name="origin" placeholder="Origin" required>
 <select name="variety"><option>Arabica</option><option>Robusta</option><option>Liberica</option><option>Excelsa</option></select><input name="process" placeholder="Process (washed, natural...)">
 <label>Roast date<input type="date" name="roastDate" required></label><input name="price" type="number" min="0" placeholder="Price (PHP)">
@@ -33,7 +34,7 @@
 <div id="jlist" class="stack"></div></div></section>
 <section id="cafes" class="view"><div class="tools"><span class="pill on">🔒 Saved offline on this device</span><button type="button" class="ghost sm" data-x="1">Export JSON</button><button type="button" class="ghost sm" data-i="1">Import JSON</button></div><div class="bento"><form id="cform" class="glass form"><h2>Add a cafe</h2><input name="name" placeholder="Cafe name" required><select name="city" id="ccity"></select><input name="drink" placeholder="Signature drink">
 <div class="pills" id="toggles"></div><button>Add cafe</button></form>
-<div><label>City<select id="cfilter"><option value="">All</option></select></label><div class="pills" id="afilter"></div><p id="ccount" class="sample"></p><div id="clist" class="stack"></div></div></div></section>
+<div><div class="tools"><button type="button" id="near" class="sm">📍 Near Me (sort by distance)</button><span id="nearmsg" class="sample"></span></div><label>City<select id="cfilter"><option value="">All</option></select></label><div class="pills" id="afilter"></div><p id="ccount" class="sample"></p><div id="clist" class="stack"></div></div></div></section>
 </main>
 <div id="toast" hidden><span>New version ready.</span><button id="reload">Reload</button></div>
 <div id="ios" hidden><div class="glass"><h3>Add to Home Screen</h3><p>Tap the Share button, then "Add to Home Screen".</p><button id="iosClose">Got it</button></div></div>
