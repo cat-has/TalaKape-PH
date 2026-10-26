@@ -3,9 +3,11 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const load=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}},save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const TITLES={brew:'Brew studio',origins:'Philippine origins',journal:'Kape journal',cafes:'Work-friendly cafes'};
+const SUBS={brew:'Pick a Philippine preset or set your own ratio, then press Start for timed pour cues.',origins:'Browse Philippine coffee regions, then load one straight into the Brew timer.',journal:'Log bags from local roasters and track how fresh each one is.',cafes:'Save cafes and filter by city and the amenities you need to work.'};
+function toast(m){const t=document.createElement('div');t.className='t';t.textContent=m;$('#msgs').append(t);setTimeout(()=>t.remove(),2800)}
 const TIPS=['Rinse paper filters with hot water to remove papery taste.','Grind right before brewing for the best aroma.','Barako loves a coarse grind and a long steep.','Weigh your coffee. Scoops lie.','Use water just off the boil for dark roasts, cooler for light.'];
 $('#tip').textContent=TIPS[new Date().getDate()%TIPS.length];
-function route(){const v=TITLES[(location.hash||'#brew').slice(1)]?(location.hash||'#brew').slice(1):'brew';$$('.view').forEach(e=>e.classList.toggle('on',e.id===v));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===v));$('#title').textContent=TITLES[v]}
+function route(){const v=TITLES[(location.hash||'#brew').slice(1)]?(location.hash||'#brew').slice(1):'brew';$$('.view').forEach(e=>e.classList.toggle('on',e.id===v));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===v));$('#title').textContent=TITLES[v];$('#sub').textContent=SUBS[v]}
 addEventListener('hashchange',route);route();
 // ---- brew
 const P=[{n:'Barako French Press',r:13,c:30,t:96,g:'Coarse',s:[['Add water',20],['Steep',210],['Plunge',20]]},
@@ -41,9 +43,9 @@ function drawO(){const q=$('#osearch').value.toLowerCase();$('#vfilter').innerHT
 const l=O.filter(o=>(!vf||o.v===vf)&&(!q||(o.n+o.v+o.t.join(' ')).toLowerCase().includes(q)));
 $('#ocards').innerHTML=l.length?l.map(o=>`<div class="card"><span class="vb ${o.v}">${o.v}</span><span class="loc">${MT} ${o.e}</span><h3>${esc(o.n)}</h3>
 <div class="dots">Light ${[1,2,3,4,5].map(i=>`<i class="${i<=o.l?'f':''}"></i>`).join('')} Dark</div><div>${o.t.map(n=>`<span class="note">${esc(n)}</span>`).join('')}</div>
-<p></p><button class="sm" data-b="${o.p}">Brew this origin</button></div>`).join(''):'<p>No origins match. Clear the search.</p>'}
+<p></p><button class="sm" data-b="${o.p}" data-n="${esc(o.n)}">Brew this origin</button></div>`).join(''):'<p>No origins match. Clear the search.</p>'}
 $('#vfilter').onclick=e=>{if(e.target.dataset.v!==undefined){vf=e.target.dataset.v;drawO()}};$('#osearch').oninput=drawO;
-$('#ocards').onclick=e=>{if(e.target.dataset.b!==undefined){pick(+e.target.dataset.b);location.hash='#brew'}};drawO();
+$('#ocards').onclick=e=>{if(e.target.dataset.b!==undefined){pick(+e.target.dataset.b);location.hash='#brew';scrollTo({top:0,behavior:'smooth'});const r=$('#brew .glass');r.classList.add('hl');setTimeout(()=>r.classList.remove('hl'),1600);toast('Loaded '+e.target.dataset.n+' into Brew Studio ☕')}};drawO();
 // ---- journal (sample data uses dates relative to today)
 const ago=n=>new Date(Date.now()-n*864e5).toISOString().slice(0,10);
 let J=load('tk_beans',[{roaster:'Yardstick Coffee',origin:'Golden Ticket blend',variety:'Arabica',process:'Washed',roastDate:ago(3),price:520,rating:4,notes:'Sample entry. Edit or delete me.',sample:1},
@@ -51,8 +53,8 @@ let J=load('tk_beans',[{roaster:'Yardstick Coffee',origin:'Golden Ticket blend',
 {roaster:'Kalsada Coffee',origin:'Sitio Belis, Benguet',variety:'Arabica',process:'Washed',roastDate:ago(45),price:580,rating:4,notes:'Sample entry. Edit or delete me.',sample:1}]);
 function fresh(d){const n=Math.floor((Date.now()-new Date(d))/864e5);return n<7?['Resting: Days 1-6 ('+Math.max(n,0)+'d)','rest']:n<=28?['Peak Flavor: Days 7-28 ('+n+'d)','']:['Past Peak: '+n+'d','past']}
 function drawJ(){$('#jlist').innerHTML=J.length?J.map((b,i)=>{const f=fresh(b.roastDate);return`<div class="card"><h3>${esc(b.roaster)}</h3><span class="badge ${f[1]}">${f[0]}</span><p>${esc(b.origin)} - ${esc(b.variety)} - ${esc(b.process)}<br>PHP ${esc(b.price||0)} <span class="star">${'★'.repeat(b.rating)}${'☆'.repeat(5-b.rating)}</span><br>${esc(b.notes)}</p><button class="ghost sm" data-d="${i}">Delete</button></div>`}).join(''):'<div class="card"><p>No bags yet. Log your first one.</p></div>'}
-$('#jform').onsubmit=e=>{e.preventDefault();J.unshift(Object.fromEntries(new FormData(e.target)));save('tk_beans',J);e.target.reset();drawJ()};
-$('#jlist').onclick=e=>{if(e.target.dataset.d){J.splice(e.target.dataset.d,1);save('tk_beans',J);drawJ()}};save('tk_beans',J);drawJ();
+$('#jform').onsubmit=e=>{e.preventDefault();J.unshift(Object.fromEntries(new FormData(e.target)));save('tk_beans',J);e.target.reset();drawJ();toast('✓ Coffee bag saved to device storage')};
+$('#jlist').onclick=e=>{if(e.target.dataset.d){J.splice(e.target.dataset.d,1);save('tk_beans',J);drawJ();toast('Coffee bag deleted')}};save('tk_beans',J);drawJ();
 // ---- cafes (amenities sample data: verify before relying on it)
 const AM=[['wifi','📶 Fast Wi-Fi'],['power','⚡ Power Sockets'],['parking','🚗 Parking'],['pets','🐾 Pet-Friendly']];
 const cities=['Metro Manila','Cebu','Davao','Baguio','Iloilo','Pampanga','Other'];
@@ -63,10 +65,14 @@ let C=load('tk_cafes',[{name:'Yardstick Legazpi',city:'Metro Manila',drink:'Flat
 let tg={};
 function drawT(){$('#toggles').innerHTML=AM.map(([k,l])=>`<button type="button" class="p ${tg[k]?'on':''}" aria-pressed="${!!tg[k]}" data-k="${k}">${l}</button>`).join('')}
 $('#toggles').onclick=e=>{const k=e.target.dataset.k;if(k){tg[k]=!tg[k];drawT()}};drawT();
-function drawC(){const f=$('#cfilter').value,l=C.map((c,i)=>[c,i]).filter(([c])=>!f||c.city===f);
+let af={};function drawA(){$('#afilter').innerHTML=AM.map(([k,l])=>`<button type="button" class="p ${af[k]?'on':''}" aria-pressed="${!!af[k]}" data-k="${k}">${l}</button>`).join('')}
+$('#afilter').onclick=e=>{const k=e.target.dataset.k;if(k){af[k]=!af[k];drawA();drawC()}};
+function drawC(){const f=$('#cfilter').value,l=C.map((c,i)=>[c,i]).filter(([c])=>(!f||c.city===f)&&AM.every(([k])=>!af[k]||c[k]));$('#ccount').textContent='Showing '+l.length+' of '+C.length+' cafes';
 $('#clist').innerHTML=l.length?l.map(([c,i])=>`<div class="card"><h3>${esc(c.name)}</h3><span class="vb Arabica">${esc(c.city)}</span><p>Signature: ${esc(c.drink)||'-'}</p><div>${AM.filter(([k])=>c[k]).map(([,t])=>`<span class="note">${t}</span>`).join('')||'<span class="sample">No perks logged</span>'}</div>${c.sample?'<p class="sample">Sample entry: verify amenities before you go.</p>':''}<button class="ghost sm" data-d="${i}">Delete</button></div>`).join(''):'<div class="card"><p>No cafes saved here yet.</p></div>'}
-$('#cform').onsubmit=e=>{e.preventDefault();const d=new FormData(e.target);C.unshift({name:d.get('name'),city:d.get('city'),drink:d.get('drink'),...Object.fromEntries(Object.entries(tg).filter(([,v])=>v).map(([k])=>[k,1]))});save('tk_cafes',C);e.target.reset();tg={};drawT();drawC()};
-$('#clist').onclick=e=>{if(e.target.dataset.d){C.splice(e.target.dataset.d,1);save('tk_cafes',C);drawC()}};$('#cfilter').onchange=drawC;save('tk_cafes',C);drawC();
+$('#cform').onsubmit=e=>{e.preventDefault();const d=new FormData(e.target);C.unshift({name:d.get('name'),city:d.get('city'),drink:d.get('drink'),...Object.fromEntries(Object.entries(tg).filter(([,v])=>v).map(([k])=>[k,1]))});save('tk_cafes',C);e.target.reset();tg={};drawT();drawC();toast('✓ Cafe saved to directory')};
+$('#clist').onclick=e=>{if(e.target.dataset.d){C.splice(e.target.dataset.d,1);save('tk_cafes',C);drawC();toast('Cafe deleted')}};$('#cfilter').onchange=drawC;save('tk_cafes',C);drawA();drawC();
+document.addEventListener('click',e=>{const b=e.target;if(b.dataset.x){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({app:'talakape',beans:J,cafes:C},null,2)],{type:'application/json'}));a.download='talakape-backup.json';a.click();toast('✓ Backup exported')}if(b.dataset.i)$('#impf').click()});
+$('#impf').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.beans)||!Array.isArray(d.cafes))throw 0;J=d.beans.map(b=>({...b,rating:Math.min(5,Math.max(1,+b.rating||3))}));C=d.cafes;save('tk_beans',J);save('tk_cafes',C);drawJ();drawC();toast('✓ Backup imported')}catch{toast('That file is not a TalaKape backup')}e.target.value=''};
 // ---- network, install, SW
 function net(){const o=navigator.onLine,p=$('#net');p.textContent=o?'Online':'Offline';p.className='pill '+(o?'on':'off')}
 addEventListener('online',net);addEventListener('offline',net);net();

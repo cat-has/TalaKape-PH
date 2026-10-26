@@ -14,7 +14,7 @@
 <a href="#cafes" data-v="cafes"><svg viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Cafes</span></a>
 <div class="tip"><b>Daily brew tip</b><p id="tip"></p></div></nav>
 <main>
-<header><h1 id="title">Brew studio</h1><div><span id="net" class="pill on">Online</span> <button id="installBtn" hidden>Install app</button></div></header>
+<header><div><div class="mbrand"><img src="favicon.svg" width="28" height="28" alt=""> TalaKape PH</div><h1 id="title">Brew studio</h1><p id="sub" class="sub"></p></div><div><span id="net" class="pill on">Online</span> <button id="installBtn" hidden>Install app</button></div></header>
 <section id="brew" class="view"><div class="bento">
 <div class="glass"><h2>Recipe</h2><div class="presets" id="presets"></div>
 <label>Ratio 1:<b id="rv">15</b><input id="ratio" type="range" min="12" max="18" value="15"></label>
@@ -23,15 +23,15 @@
 <div class="glass center"><div class="ringwrap"><svg viewBox="0 0 240 240" width="240" height="240"><circle class="trk" cx="120" cy="120" r="104"/><circle id="ring" cx="120" cy="120" r="104"/></svg><div class="mid"><div id="clock">00:00</div><div id="stepNow">Ready</div></div></div>
 <div id="steps" class="pills"></div><div class="row"><button id="start">Start</button><button id="reset" class="ghost">Reset</button></div></div></div></section>
 <section id="origins" class="view"><div class="row"><input id="osearch" type="search" placeholder="Search region, notes..."></div><div class="pills" id="vfilter"></div><div id="ocards" class="grid"></div></section>
-<section id="journal" class="view"><div class="bento"><form id="jform" class="glass form"><h2>Log a bag</h2><input name="roaster" placeholder="Roaster" required><input name="origin" placeholder="Origin" required>
+<section id="journal" class="view"><div class="tools"><span class="pill on">🔒 Saved offline on this device</span><button type="button" class="ghost sm" data-x="1">Export JSON</button><button type="button" class="ghost sm" data-i="1">Import JSON</button></div><div class="bento"><form id="jform" class="glass form"><h2>Log a bag</h2><input name="roaster" placeholder="Roaster" required><input name="origin" placeholder="Origin" required>
 <select name="variety"><option>Arabica</option><option>Robusta</option><option>Liberica</option><option>Excelsa</option></select><input name="process" placeholder="Process (washed, natural...)">
 <label>Roast date<input type="date" name="roastDate" required></label><input name="price" type="number" min="0" placeholder="Price (PHP)">
 <select name="rating"><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select><input name="notes" placeholder="Tasting notes"><button>Save bag</button></form>
 <div id="jlist" class="stack"></div></div></section>
-<section id="cafes" class="view"><div class="bento"><form id="cform" class="glass form"><h2>Add a cafe</h2><input name="name" placeholder="Cafe name" required><select name="city" id="ccity"></select><input name="drink" placeholder="Signature drink">
+<section id="cafes" class="view"><div class="tools"><span class="pill on">🔒 Saved offline on this device</span><button type="button" class="ghost sm" data-x="1">Export JSON</button><button type="button" class="ghost sm" data-i="1">Import JSON</button></div><div class="bento"><form id="cform" class="glass form"><h2>Add a cafe</h2><input name="name" placeholder="Cafe name" required><select name="city" id="ccity"></select><input name="drink" placeholder="Signature drink">
 <div class="pills" id="toggles"></div><button>Add cafe</button></form>
-<div><label>City<select id="cfilter"><option value="">All</option></select></label><div id="clist" class="stack"></div></div></div></section>
+<div><label>City<select id="cfilter"><option value="">All</option></select></label><div class="pills" id="afilter"></div><p id="ccount" class="sample"></p><div id="clist" class="stack"></div></div></div></section>
 </main>
 <div id="toast" hidden><span>New version ready.</span><button id="reload">Reload</button></div>
 <div id="ios" hidden><div class="glass"><h3>Add to Home Screen</h3><p>Tap the Share button, then "Add to Home Screen".</p><button id="iosClose">Got it</button></div></div>
-<script src="./js/app.js"></script></body></html>
+<input type="file" id="impf" accept="application/json" hidden><div id="msgs"></div><script src="./js/app.js"></script></body></html>
